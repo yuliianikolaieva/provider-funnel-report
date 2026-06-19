@@ -62,6 +62,10 @@
   .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
   .footnote{font-size:11.5px;color:var(--muted);font-style:italic;margin-top:8px}
 
+  table.bench td.ev{font-weight:800}
+  .ev-up{color:var(--ok)} .ev-eq{color:var(--muted)} .ev-down{color:#b45309}
+  table.bench tr td:nth-child(2){font-weight:800;color:var(--accent2)}
+
   .concl{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
   .cbox{border:1px solid var(--line);border-radius:10px;padding:14px 16px}
   .cbox.info{border-left:4px solid var(--info);background:rgba(37,99,235,.04)}
@@ -90,6 +94,7 @@
     <a href="#kpi">Огляд</a>
     <a href="#metrics">Показники</a>
     <a href="#cities">Міста</a>
+    <a href="#bench">Орієнтири</a>
     <a href="#stores">Заклади</a>
     <a href="#opportunities">Можливості</a>
     <span class="right"><button class="dl" onclick="window.print()">Зберегти у PDF</button></span>
@@ -212,6 +217,30 @@
 
   </div>
 
+  <!-- BENCHMARK -->
+  <h2 id="bench">Орієнтири: як це виглядає на тлі ринку</h2>
+  <p>Щоб оцінити результати в контексті, ми порівняли ключові показники конверсії VARUS із середніми значеннями інших топ-партнерів роздрібного сегмента на Bolt Food за травень 2026. Загальна картина дуже позитивна: за залученістю та конверсією мережа впевнено випереджає ринок.</p>
+  <div class="tblwrap">
+  <table class="dt bench">
+    <thead><tr>
+      <th>Показник</th><th>VARUS, травень</th><th>Орієнтир (топ-партнери)</th><th>Оцінка</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>Залученість меню (перегляд → кошик)</td><td>41%</td><td>≈ 37%</td><td class="ev ev-up">Вище ринку</td></tr>
+      <tr><td>Конверсія (перегляд → замовлення)</td><td>23%</td><td>≈ 21%</td><td class="ev ev-up">Вище ринку</td></tr>
+      <tr><td>Завершення кошика (кошик → замовлення)</td><td>56%</td><td>≈ 56%</td><td class="ev ev-eq">На рівні ринку</td></tr>
+      <tr><td>Перехід «покази → перегляд меню»</td><td>6.4%</td><td>≈ 5.7%</td><td class="ev ev-up">Вище ринку</td></tr>
+      <tr><td>Середній чек, €</td><td>€11.8</td><td>≈ €13</td><td class="ev ev-down">Простір для зростання</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="footnote">Орієнтир — середнє значення по групі провідних партнерів роздрібного сегмента Bolt Food в Україні за травень 2026. Конкретні мережі не розкриваються.</p>
+
+  <div class="chartbox" style="margin-top:14px">
+    <canvas id="benchChart" height="120"></canvas>
+    <p class="chartcap">Ключові показники конверсії: VARUS проти орієнтиру топ-партнерів, %. Травень 2026.</p>
+  </div>
+
   <!-- CITY CHARTS -->
   <h2 id="cities">Оборот за містами</h2>
   <div class="chartbox">
@@ -267,8 +296,8 @@
   <div class="concl">
     <div class="cbox acc"><h3>Сильні флагмани</h3><p>Київ і Дніпро впевнено лідирують — разом 78% обороту та більшість активних закладів. Це надійна опора партнерства, на яку можна спиратися при масштабуванні.</p></div>
     <div class="cbox info"><h3>Потенціал на старті шляху клієнта</h3><p>Видимість дуже висока (417 тис. показів). Підвищення частки переходів із показів у перегляд меню — через банери, промо-позиції та якісні фото/описи — це найбільший спільний резерв зростання.</p></div>
-    <div class="cbox ok"><h3>Здорова конверсія</h3><p>Після перегляду меню результати сильні: 41% додають товар, 23% оформлюють замовлення, а скасувань майже немає. Це свідчить про привабливий асортимент і ціни.</p></div>
-    <div class="cbox acc"><h3>Зростання нової аудиторії</h3><p>Менші міста (Запоріжжя, Кривий Ріг, Одеса) і нові локації мають хороший потенціал. Спільні кампанії із залучення нових клієнтів допоможуть розкрити ці ринки.</p></div>
+    <div class="cbox ok"><h3>Конверсія вища за ринок</h3><p>Після перегляду меню результати сильні й перевищують середній рівень топ-партнерів: 41% додають товар (орієнтир ~37%), 23% оформлюють замовлення (орієнтир ~21%), а скасувань майже немає. Це свідчить про привабливий асортимент і ціни.</p></div>
+    <div class="cbox acc"><h3>Середній чек — головний резерв</h3><p>Середній чек (€11.8) поки нижчий за орієнтир топ-партнерів (~€13). Робота з кошиком — рекомендації товарів, набори, поріг безкоштовної доставки — може суттєво підняти оборот без додаткового трафіку. Додатковий резерв — залучення нових клієнтів у менших містах (Запоріжжя, Кривий Ріг, Одеса).</p></div>
   </div>
 
   <p class="note">Дані: внутрішня аналітика Bolt Food, травень 2026. Будемо раді обговорити деталі та спланувати наступні кроки спільно з вашою командою.</p>
@@ -302,6 +331,16 @@ new Chart(document.getElementById('convChart'), {
   data:{ labels:cities, datasets:[
     { label:'Залученість меню', data:[40,44,42,40,35,43,44,34,15,23], backgroundColor:palette.info, borderRadius:4 },
     { label:'Конверсія', data:[22,25,25,22,18,29,25,16,7,4], backgroundColor:palette.ok, borderRadius:4 } ] },
+  options:{ plugins:{legend:{position:'top'}, tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+'%'}}},
+    scales:{ y:{ title:{display:true,text:'%'}, ticks:{callback:v=>v+'%'} } } }
+});
+
+new Chart(document.getElementById('benchChart'), {
+  type:'bar',
+  data:{ labels:['Залученість меню','Конверсія','Завершення кошика','Покази → меню'],
+    datasets:[
+      { label:'VARUS', data:[41,23,56,6.4], backgroundColor:palette.accent, borderRadius:4 },
+      { label:'Орієнтир (топ-партнери)', data:[37,21,56,5.7], backgroundColor:palette.muted, borderRadius:4 } ] },
   options:{ plugins:{legend:{position:'top'}, tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+'%'}}},
     scales:{ y:{ title:{display:true,text:'%'}, ticks:{callback:v=>v+'%'} } } }
 });
