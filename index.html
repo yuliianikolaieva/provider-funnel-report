@@ -85,10 +85,39 @@
   .mc .fx{}
   @media(max-width:760px){ .kpis{grid-template-columns:repeat(2,1fr)} .cards,.concl{grid-template-columns:1fr} .sheet{padding:20px} }
   @media print{
+    @page{ size:A4 portrait; margin:11mm; }
     nav.topnav{display:none}
-    body{background:#fff}
+    body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .wrap{max-width:none;margin:0;padding:0}
     .sheet{border:none;box-shadow:none;border-radius:0;padding:0}
-    .mc,.cbox,.chartbox,.tblwrap,.intro,.kpi{break-inside:avoid}
+    /* only the active partner page prints */
+    .page{display:none !important}
+    .page.active{display:block !important}
+
+    h1{font-size:19px;margin-bottom:2px}
+    h2{font-size:13.5px;margin:16px 0 7px;break-after:avoid;page-break-after:avoid;break-inside:avoid}
+    h3{break-after:avoid;page-break-after:avoid}
+    p,.subtitle{orphans:3;widows:3}
+
+    /* keep every visual block intact across page breaks */
+    .kpi,.mc,.cbox,.callout,.intro,.chartbox,.tag{break-inside:avoid;page-break-inside:avoid}
+    .kpis{break-inside:avoid;page-break-inside:avoid}
+    .cards,.concl{break-inside:auto}
+    .chartbox{break-inside:avoid;page-break-inside:avoid}
+    .chartbox canvas{max-height:300px}
+
+    /* tables: repeat header on each page, never split a row */
+    .tblwrap{overflow:visible;border:none;break-inside:auto}
+    table.dt{font-size:8.6px;break-inside:auto}
+    table.dt thead{display:table-header-group}
+    table.dt tfoot{display:table-footer-group}
+    table.dt tr{break-inside:avoid;page-break-inside:avoid}
+    table.dt th,table.dt td{padding:3px 5px}
+    table.bench{font-size:11px}
+    table.bench th,table.bench td{padding:6px 8px}
+
+    canvas{max-width:100% !important}
+    .footnote,.note{break-inside:avoid}
   }
 </style>
 </head>
