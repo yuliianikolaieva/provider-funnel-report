@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Provider Funnel — Україна, травень 2026</title>
+<title>Огляд ефективності на Bolt Food — Україна, травень 2026</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   :root{
     --bg:#eef1f7; --panel:#ffffff; --line:#dfe5ee; --text:#13203a; --muted:#5d6b85; --soft:#33425d;
-    --accent:#34b27a; --accent2:#0e8f5e; --info:#2563eb; --warn:#ea580c; --crit:#dc2626; --ok:#15a34a;
+    --accent:#34b27a; --accent2:#0e8f5e; --info:#2563eb; --ok:#15a34a;
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
@@ -26,25 +26,18 @@
   .sheet{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:32px 38px;box-shadow:0 1px 4px rgba(20,40,80,.06)}
   h1{font-size:25px;margin:0 0 3px}
   .subtitle{color:var(--muted);font-size:13.5px;margin:0 0 4px}
-  .subtitle a{color:var(--accent2);font-weight:700}
   .tag{display:inline-block;font-size:11px;font-weight:700;color:var(--accent2);background:rgba(52,178,122,.12);border:1px solid rgba(52,178,122,.3);border-radius:6px;padding:2px 8px;margin-top:6px}
   h2{font-size:16px;margin:30px 0 10px;color:var(--accent2);border-bottom:1px solid var(--line);padding-bottom:5px}
   p{margin:7px 0;font-size:13.5px;color:var(--soft)}
   b{color:var(--text)}
 
+  .intro{background:rgba(52,178,122,.06);border:1px solid rgba(52,178,122,.28);border-radius:10px;padding:14px 18px;margin-top:18px;font-size:13.5px;color:var(--soft)}
+
   .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
   .kpi{border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fafbfd}
   .kpi .v{font-size:21px;font-weight:800;color:var(--text)}
-  .kpi .v.ok{color:var(--ok)} .kpi .v.info{color:var(--info)} .kpi .v.crit{color:var(--crit)} .kpi .v.warn{color:var(--warn)}
+  .kpi .v.ok{color:var(--ok)} .kpi .v.info{color:var(--info)} .kpi .v.acc{color:var(--accent2)}
   .kpi .l{font-size:11.5px;color:var(--muted);margin-top:3px}
-
-  .callout{border-radius:10px;padding:13px 16px;margin:16px 0;font-size:13px;border:1px solid var(--line)}
-  .callout.warn{border-left:4px solid var(--warn);background:rgba(234,88,12,.05)}
-  .callout.info{border-left:4px solid var(--info);background:rgba(37,99,235,.05)}
-  .callout .t{font-weight:800;margin-bottom:4px;color:var(--warn)}
-  .callout.info .t{color:var(--info)}
-  .callout ol{margin:4px 0 0;padding-left:18px}
-  .callout li{margin:3px 0;color:var(--soft)}
 
   .chartbox{border:1px solid var(--line);border-radius:10px;padding:16px;background:#fff}
   .chartcap{font-size:11.5px;color:var(--muted);margin:6px 0 0}
@@ -54,10 +47,9 @@
   .mc .mh{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
   .mc .mn{font-weight:800;font-size:14px;color:var(--text)}
   .mc .mv{font-weight:800;font-size:14px;white-space:nowrap}
-  .mc .mv.info{color:var(--info)} .mc .mv.ok{color:var(--ok)} .mc .mv.warn{color:var(--warn)} .mc .mv.crit{color:var(--crit)} .mc .mv.neutral{color:var(--soft)}
-  .mc .src{font-size:11px;color:var(--muted);margin-top:2px}
+  .mc .mv.info{color:var(--info)} .mc .mv.ok{color:var(--ok)} .mc .mv.acc{color:var(--accent2)} .mc .mv.neutral{color:var(--soft)}
+  .mc .src{font-size:11px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
   .mc .def{font-size:12.5px;color:var(--soft);margin:7px 0}
-  .mc .fx{font-size:11.5px;color:var(--muted);font-family:ui-monospace,Menlo,monospace;background:#f4f6fa;border:1px solid var(--line);border-radius:6px;padding:4px 7px;margin:4px 0;display:inline-block}
   .mc .cc{font-size:12.5px;color:var(--text);border-top:1px dashed var(--line);padding-top:7px;margin-top:7px}
   .mc .cc b{color:var(--accent2)}
 
@@ -73,11 +65,10 @@
   .concl{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
   .cbox{border:1px solid var(--line);border-radius:10px;padding:14px 16px}
   .cbox.info{border-left:4px solid var(--info);background:rgba(37,99,235,.04)}
-  .cbox.crit{border-left:4px solid var(--crit);background:rgba(220,38,38,.04)}
+  .cbox.acc{border-left:4px solid var(--accent);background:rgba(52,178,122,.06)}
   .cbox.ok{border-left:4px solid var(--ok);background:rgba(21,163,74,.05)}
-  .cbox.warn{border-left:4px solid var(--warn);background:rgba(234,88,12,.05)}
   .cbox h3{margin:0 0 5px;font-size:13.5px}
-  .cbox.info h3{color:var(--info)} .cbox.crit h3{color:var(--crit)} .cbox.ok h3{color:var(--ok)} .cbox.warn h3{color:var(--warn)}
+  .cbox.info h3{color:var(--info)} .cbox.acc h3{color:var(--accent2)} .cbox.ok h3{color:var(--ok)}
   .cbox p{margin:0;font-size:12.5px}
 
   .note{color:var(--muted);font-size:11.5px;margin-top:20px;border-top:1px solid var(--line);padding-top:12px}
@@ -87,7 +78,7 @@
     nav.topnav{display:none}
     body{background:#fff}
     .sheet{border:none;box-shadow:none;border-radius:0;padding:0}
-    .mc,.cbox,.chartbox,.tblwrap,.callout,.kpi{break-inside:avoid}
+    .mc,.cbox,.chartbox,.tblwrap,.intro,.kpi{break-inside:avoid}
   }
 </style>
 </head>
@@ -95,11 +86,11 @@
 
 <nav class="topnav">
   <div class="inner">
-    <span class="brand">Bolt Food UA · Provider Funnel</span>
+    <span class="brand">Bolt Food · Огляд ефективності</span>
     <a href="#kpi">Огляд</a>
-    <a href="#metrics">Метрики</a>
+    <a href="#metrics">Показники</a>
     <a href="#cities">Міста</a>
-    <a href="#conclusions">Висновки</a>
+    <a href="#opportunities">Можливості</a>
     <span class="right"><button class="dl" onclick="window.print()">Зберегти у PDF</button></span>
   </div>
 </nav>
@@ -107,143 +98,130 @@
 <div class="wrap">
 <div class="sheet">
 
-  <h1>Provider Funnel — Україна</h1>
-  <p class="subtitle">Аналіз merchant-воронки по містах · Період: <b>травень 2026 (2026-05)</b></p>
-  <p class="subtitle">Джерело: Databricks / Looker explore <a href="https://bolt.cloud.looker.com/explore/curated_delivery/fact_provider">curated_delivery / fact_provider</a> · визначення метрик звірені з Bolt Food Metrics Glossary</p>
-  <span class="tag">curated_delivery / fact_provider</span>
+  <h1>Огляд ефективності на Bolt Food — Україна</h1>
+  <p class="subtitle">Результати співпраці по містах · Період: <b>травень 2026</b></p>
+  <span class="tag">Підготовлено командою Bolt Food</span>
+
+  <div class="intro">
+    Дякуємо за плідну співпрацю! Цей огляд підсумовує результати ваших закладів на Bolt Food у травні 2026 року
+    та окреслює напрями, де ми бачимо найбільший потенціал для спільного зростання. Раді обговорити будь-який із
+    розділів детальніше та узгодити спільні кроки.
+  </div>
 
   <!-- KPI -->
   <div id="kpi" class="kpis">
-    <div class="kpi"><div class="v info">€72,612</div><div class="l">GMV до знижок</div></div>
+    <div class="kpi"><div class="v acc">€72,612</div><div class="l">Оборот (GMV) до знижок</div></div>
     <div class="kpi"><div class="v ok">6,168</div><div class="l">Доставлені замовлення</div></div>
-    <div class="kpi"><div class="v">59</div><div class="l">Активні мерчанти</div></div>
-    <div class="kpi"><div class="v">€11.77</div><div class="l">Середній чек (GMV/Orders)</div></div>
-    <div class="kpi"><div class="v">416,994</div><div class="l">Покази (impressions)</div></div>
-    <div class="kpi"><div class="v crit">6.4%</div><div class="l">Покази → перегляд меню</div></div>
-    <div class="kpi"><div class="v ok">23%</div><div class="l">Conversion (меню→замовл.)</div></div>
-    <div class="kpi"><div class="v warn">434</div><div class="l">Нові для міста користувачі</div></div>
-  </div>
-
-  <div class="callout warn">
-    <div class="t">Два зауваження до якості даних звіту</div>
-    <ol>
-      <li>Колонка <b>«Cart Abandonment Rate»</b> містить значення = Order Placed / Product Added, тобто це коефіцієнт <b>завершення</b> (додав → замовив), а НЕ покинутих кошиків. Реальний abandonment = 100% мінус показане значення.</li>
-      <li>Усі колонки <b>Δ % / Δ ppt (PP)</b> у вивантаженні порожні — немає попереднього періоду для порівняння. Для динаміки додайте квітень 2026 у фільтр часу.</li>
-    </ol>
+    <div class="kpi"><div class="v">59</div><div class="l">Активні заклади</div></div>
+    <div class="kpi"><div class="v">€11.77</div><div class="l">Середній чек</div></div>
+    <div class="kpi"><div class="v info">416,994</div><div class="l">Покази у застосунку</div></div>
+    <div class="kpi"><div class="v">26,820</div><div class="l">Переглядів меню</div></div>
+    <div class="kpi"><div class="v ok">23%</div><div class="l">Конверсія (меню→замовл.)</div></div>
+    <div class="kpi"><div class="v acc">3,669</div><div class="l">Залучені клієнти</div></div>
   </div>
 
   <!-- FUNNEL -->
-  <h2>Воронка (тотал по Україні)</h2>
+  <h2>Шлях клієнта (тотал по Україні)</h2>
   <div class="chartbox">
     <canvas id="funnelChart" height="110"></canvas>
-    <p class="chartcap">Сесії на кожному кроці. Покази (417K) свідомо не показані — вони на 2 порядки більші й «сплющили» б решту. Перехід Покази → Перегляд меню = 6,4%.</p>
+    <p class="chartcap">Кількість сесій на кожному етапі: від перегляду меню до доставленого замовлення. Покази у застосунку (417 тис.) винесено окремо у показниках вище, оскільки їхній масштаб значно більший.</p>
   </div>
 
-  <!-- ADDITIVE METRICS -->
-  <h2 id="metrics">Адитивні метрики мерчантів</h2>
-  <p>Кожна картка: визначення з dbx-глосарію + значення (тотал) + короткий висновок.</p>
+  <!-- METRICS -->
+  <h2 id="metrics">Ключові показники</h2>
+  <p>До кожного показника — що він означає та короткий коментар.</p>
   <div class="cards">
 
-    <div class="mc"><div class="mh"><span class="mn">Total GMV Before Discounts, €</span><span class="mv info">€72,612</span></div>
-      <div class="src">dbx · curated_delivery.fact_provider</div>
-      <div class="def">Сумарна вартість доставлених замовлень (GMV) до застосування знижок, у євро.</div>
-      <div class="cc"><b>Висновок:</b> Київ дає €38,2K (53% усього GMV), Дніпро — €18K (25%). Решта 8 міст разом — лише 22%. Дуже висока концентрація обороту в 2 містах.</div>
+    <div class="mc"><div class="mh"><span class="mn">Оборот (GMV) до знижок, €</span><span class="mv acc">€72,612</span></div>
+      <div class="src">Оборот</div>
+      <div class="def">Сумарна вартість доставлених замовлень до застосування знижок.</div>
+      <div class="cc"><b>Коментар:</b> Київ (€38,2K) і Дніпро (€18K) — ваші флагманські міста, разом це 78% обороту. Інші міста формують перспективну базу для подальшого масштабування.</div>
     </div>
 
-    <div class="mc"><div class="mh"><span class="mn">Active Merchant Count, #</span><span class="mv neutral">59</span></div>
-      <div class="src">dbx · «unique providers active ≥ 1 sec»</div>
-      <div class="def">Кількість унікальних мерчантів, активних хоча б 1 секунду протягом періоду.</div>
-      <div class="cc"><b>Висновок:</b> 35 із 59 (59%) — у Києві та Дніпрі. У 4 містах працює лише по 1 мерчанту — тонке покриття.</div>
+    <div class="mc"><div class="mh"><span class="mn">Активні заклади, #</span><span class="mv neutral">59</span></div>
+      <div class="src">Покриття</div>
+      <div class="def">Кількість ваших закладів, що мали активність протягом періоду.</div>
+      <div class="cc"><b>Коментар:</b> 59 активних закладів у 10 містах. Найширша присутність — у Києві та Дніпрі; у менших містах є простір для розширення мережі.</div>
     </div>
 
-    <div class="mc"><div class="mh"><span class="mn">Merchant Impressions Sessions, #</span><span class="mv warn">416,994</span></div>
-      <div class="src">dbx · «Number of sessions with impressions»</div>
-      <div class="def">Кількість сесій, у яких мерчант був показаний користувачу. Верхівка воронки; у звіті дублюється колонкою «Impressions».</div>
-      <div class="cc"><b>Висновок:</b> 417K показів, але лише ~6,4% доходять до перегляду меню (26,8K) — головна точка втрати у воронці.</div>
+    <div class="mc"><div class="mh"><span class="mn">Покази у застосунку, #</span><span class="mv info">416,994</span></div>
+      <div class="src">Видимість</div>
+      <div class="def">Скільки разів ваші заклади з'явилися у видачі застосунку.</div>
+      <div class="cc"><b>Коментар:</b> 417 тис. показів — потужна видимість на платформі та хороша основа для подальшого зростання трафіку в меню.</div>
     </div>
 
-    <div class="mc"><div class="mh"><span class="mn">Merchant Viewed Sessions, #</span><span class="mv info">26,820</span></div>
-      <div class="src">dbx · «Sessions where the provider menu was viewed»</div>
-      <div class="def">Сесії, у яких користувач відкрив меню мерчанта. У звіті дублюється колонкою «Menu views».</div>
-      <div class="cc"><b>Висновок:</b> реальна «робоча» верхівка воронки конверсії, від якої рахуються Menu Engagement та Conversion Rate.</div>
+    <div class="mc"><div class="mh"><span class="mn">Переглядів меню, #</span><span class="mv info">26,820</span></div>
+      <div class="src">Інтерес</div>
+      <div class="def">Сесії, у яких користувачі відкрили меню ваших закладів.</div>
+      <div class="cc"><b>Коментар:</b> 26,8 тис. переглядів — це аудиторія, найбільш готова до замовлення, і ключовий етап для подальшої конверсії.</div>
     </div>
 
-    <div class="mc"><div class="mh"><span class="mn">Product Added Sessions, #</span><span class="mv neutral">11,015</span></div>
-      <div class="src">dbx · «Sessions where the provider product added»</div>
-      <div class="def">Кількість сесій, у яких користувач додав товар у кошик.</div>
-      <div class="cc"><b>Висновок:</b> 41% переглядів меню завершуються додаванням товару. Із цих сесій замовлення оформлюють ~56%.</div>
+    <div class="mc"><div class="mh"><span class="mn">Додавань у кошик, #</span><span class="mv neutral">11,015</span></div>
+      <div class="src">Залученість</div>
+      <div class="def">Сесії, у яких користувачі додали товар у кошик.</div>
+      <div class="cc"><b>Коментар:</b> 41% переглядів меню завершуються додаванням товару — хороший показник зацікавленості асортиментом.</div>
     </div>
 
-    <div class="mc"><div class="mh"><span class="mn">Order Placed Sessions, #</span><span class="mv ok">6,131</span></div>
-      <div class="src">dbx · «Sessions for which an order was placed»</div>
-      <div class="def">Сесії, у яких було оформлено замовлення для мерчанта.</div>
-      <div class="cc"><b>Висновок:</b> майже збігається з доставленими (6,2K) — частка скасувань/відмов низька.</div>
+    <div class="mc"><div class="mh"><span class="mn">Оформлених замовлень, #</span><span class="mv ok">6,131</span></div>
+      <div class="src">Замовлення</div>
+      <div class="def">Сесії, у яких було оформлено замовлення.</div>
+      <div class="cc"><b>Коментар:</b> майже всі оформлені замовлення доходять до доставки — частка скасувань мінімальна.</div>
     </div>
 
-    <div class="mc"><div class="mh"><span class="mn">Merchant Delivered Orders Count, #</span><span class="mv ok">6,168</span></div>
-      <div class="src">dbx · «The total count of delivered orders»</div>
-      <div class="def">Загальна кількість фактично доставлених замовлень. У звіті дублюється колонкою «Orders».</div>
-      <div class="cc"><b>Висновок:</b> 6,168 замовлень за травень. Середній чек (GMV/Orders) ≈ €11,8.</div>
+    <div class="mc"><div class="mh"><span class="mn">Доставлених замовлень, #</span><span class="mv ok">6,168</span></div>
+      <div class="src">Результат</div>
+      <div class="def">Загальна кількість фактично доставлених замовлень.</div>
+      <div class="cc"><b>Коментар:</b> 6 168 замовлень за травень, середній чек ≈ €11,8.</div>
     </div>
 
-    <div class="mc"><div class="mh"><span class="mn">Users Activated Brand Count, #</span><span class="mv info">3,669</span></div>
-      <div class="src">dbx · «Count of users activated per brand»</div>
-      <div class="def">Кількість користувачів, активованих на рівні бренду (перше замовлення в межах бренду).</div>
-      <div class="cc"><b>Висновок:</b> широка база залучення; корелює з обсягом замовлень по містах.</div>
+    <div class="mc"><div class="mh"><span class="mn">Залучені клієнти (бренд), #</span><span class="mv acc">3,669</span></div>
+      <div class="src">Аудиторія</div>
+      <div class="def">Користувачі, які зробили перше замовлення у ваших закладах.</div>
+      <div class="cc"><b>Коментар:</b> 3 669 клієнтів — широка база залучення, що добре корелює з обсягом замовлень по містах.</div>
     </div>
 
-    <div class="mc"><div class="mh"><span class="mn">Users Activated City Count, #</span><span class="mv warn">434</span></div>
-      <div class="src">dbx · «Count of users activated per city»</div>
-      <div class="def">Кількість користувачів, активованих на рівні міста (нові для міста користувачі).</div>
-      <div class="cc"><b>Висновок:</b> лише 434 нові для міста проти 3,669 на рівні бренду → зростання за рахунок наявної бази, а не нового притоку.</div>
+    <div class="mc"><div class="mh"><span class="mn">Нові для міста клієнти, #</span><span class="mv neutral">434</span></div>
+      <div class="src">Зростання</div>
+      <div class="def">Клієнти, активовані вперше на рівні міста.</div>
+      <div class="cc"><b>Коментар:</b> 434 нові клієнти — перспективний напрям: спільні промо та підвищення видимості допоможуть залучати ще більше нової аудиторії.</div>
     </div>
 
   </div>
 
-  <!-- RATES -->
-  <h2>Похідні метрики (коефіцієнти)</h2>
+  <h2>Якість конверсії</h2>
   <div class="cards">
 
-    <div class="mc"><div class="mh"><span class="mn">Menu Engagement Rate</span><span class="mv info">41%</span></div>
-      <div class="src">Похідна (розрахунок у звіті)</div>
+    <div class="mc"><div class="mh"><span class="mn">Залученість меню</span><span class="mv info">41%</span></div>
+      <div class="src">Перегляд → кошик</div>
       <div class="def">Частка переглядів меню, що призвели до додавання товару в кошик.</div>
-      <div class="fx">Product Added Sessions / Merchant Viewed Sessions</div>
-      <div class="cc"><b>Висновок:</b> перевірено: 11,015 / 26,820 = 41,1%. Найкраще — Дніпро/Бровари (44%), найгірше — Камʼянське (15%).</div>
+      <div class="cc"><b>Коментар:</b> 41% у середньому. Найвищі показники — у Дніпрі та Броварах (44%).</div>
     </div>
 
-    <div class="mc"><div class="mh"><span class="mn">Conversion Rate</span><span class="mv ok">23%</span></div>
-      <div class="src">Похідна (розрахунок у звіті)</div>
+    <div class="mc"><div class="mh"><span class="mn">Конверсія</span><span class="mv ok">23%</span></div>
+      <div class="src">Перегляд → замовлення</div>
       <div class="def">Частка переглядів меню, що завершилися оформленням замовлення.</div>
-      <div class="fx">Order Placed Sessions / Merchant Viewed Sessions</div>
-      <div class="cc"><b>Висновок:</b> 6,131 / 26,820 = 22,9%. Лідер — Ірпінь (29%), аутсайдери — Камʼянське (7%) і Вишгород (4%).</div>
+      <div class="cc"><b>Коментар:</b> 23% у середньому. Лідери — Ірпінь (29%), Дніпро та Кривий Ріг (25%).</div>
     </div>
 
-    <div class="mc"><div class="mh"><span class="mn">Cart Abandonment Rate</span><span class="mv crit">56%</span></div>
-      <div class="src">Похідна — увага: лейбл інвертований</div>
-      <div class="def">У вивантаженні значення = Order Placed / Product Added, тобто це коефіцієнт ЗАВЕРШЕННЯ, а не покинуті кошики.</div>
-      <div class="fx">Order Placed Sessions / Product Added Sessions</div>
-      <div class="cc"><b>Висновок:</b> 6,131 / 11,015 = 55,7%. Це частка успішних оформлень. Реальний abandonment = 100% − 56% = 44%.</div>
-    </div>
-
-    <div class="mc"><div class="mh"><span class="mn">Δ % / Δ ppt (PP колонки)</span><span class="mv warn">порожньо</span></div>
-      <div class="src">Похідна (period-over-period)</div>
-      <div class="def">Зміна метрики відносно попереднього періоду: Δ% для абсолютних, Δ ppt для відсоткових метрик.</div>
-      <div class="cc"><b>Висновок:</b> усі PP-колонки порожні — у вивантаженні немає попереднього періоду. Для трендів додайте квітень 2026.</div>
+    <div class="mc"><div class="mh"><span class="mn">Завершення кошика</span><span class="mv ok">56%</span></div>
+      <div class="src">Кошик → замовлення</div>
+      <div class="def">Частка сесій із доданим товаром, що завершилися оформленням замовлення.</div>
+      <div class="cc"><b>Коментар:</b> 56% кошиків доходять до замовлення. Спрощення оформлення та промо на дрібні кошики можуть підняти цей показник ще вище.</div>
     </div>
 
   </div>
 
   <!-- CITY CHARTS -->
-  <h2 id="cities">GMV за містами</h2>
+  <h2 id="cities">Оборот за містами</h2>
   <div class="chartbox">
     <canvas id="gmvChart" height="150"></canvas>
-    <p class="chartcap">Total GMV Before Discounts, € — травень 2026. Джерело: curated_delivery / fact_provider.</p>
+    <p class="chartcap">Оборот (GMV) до знижок, € — травень 2026.</p>
   </div>
 
-  <h2>Якість конверсії за містами</h2>
+  <h2>Конверсія за містами</h2>
   <div class="chartbox">
     <canvas id="convChart" height="130"></canvas>
-    <p class="chartcap">Menu Engagement Rate (додано/перегляд) та Conversion Rate (замовлення/перегляд), %. Джерело: розрахунок зі звіту.</p>
+    <p class="chartcap">Залученість меню (перегляд → кошик) та конверсія (перегляд → замовлення), %.</p>
   </div>
 
   <!-- CITY TABLE -->
@@ -251,65 +229,65 @@
   <div class="tblwrap">
   <table class="dt">
     <thead><tr>
-      <th>Місто</th><th>GMV €</th><th>Мерч.</th><th>Покази</th><th>Перегл. меню</th><th>Додано</th><th>Оформл.</th><th>Дост.</th><th>Акт. бренд</th><th>Акт. місто</th><th>Menu Eng</th><th>Conv</th><th>Compl.*</th>
+      <th>Місто</th><th>Оборот €</th><th>Закл.</th><th>Покази</th><th>Перегл. меню</th><th>Кошик</th><th>Оформл.</th><th>Дост.</th><th>Клієнти</th><th>Нові</th><th>Залуч.</th><th>Конв.</th><th>Заверш.</th>
     </tr></thead>
     <tbody>
-      <tr><td>Kyiv</td><td>€38,180</td><td>18</td><td>262,567</td><td>13,628</td><td>5,507</td><td>3,009</td><td>2,993</td><td>1,833</td><td>182</td><td>40%</td><td>22%</td><td>55%</td></tr>
-      <tr><td>Dnipro</td><td>€18,017</td><td>17</td><td>88,157</td><td>6,597</td><td>2,922</td><td>1,682</td><td>1,674</td><td>1,008</td><td>106</td><td>44%</td><td>25%</td><td>58%</td></tr>
-      <tr><td>Kryvyi Rih</td><td>€5,551</td><td>8</td><td>19,812</td><td>1,989</td><td>843</td><td>491</td><td>537</td><td>247</td><td>33</td><td>42%</td><td>25%</td><td>58%</td></tr>
-      <tr><td>Zaporizhia</td><td>€4,365</td><td>4</td><td>15,858</td><td>1,723</td><td>688</td><td>374</td><td>383</td><td>234</td><td>50</td><td>40%</td><td>22%</td><td>54%</td></tr>
-      <tr><td>Odesa</td><td>€2,321</td><td>5</td><td>13,726</td><td>1,249</td><td>434</td><td>219</td><td>210</td><td>138</td><td>17</td><td>35%</td><td>18%</td><td>50%</td></tr>
-      <tr><td>Irpin</td><td>€1,826</td><td>1</td><td>5,869</td><td>522</td><td>226</td><td>152</td><td>156</td><td>86</td><td>16</td><td>43%</td><td>29%</td><td>67%</td></tr>
-      <tr><td>Brovary</td><td>€1,550</td><td>1</td><td>5,590</td><td>529</td><td>235</td><td>132</td><td>140</td><td>74</td><td>18</td><td>44%</td><td>25%</td><td>56%</td></tr>
-      <tr><td>Pavlohrad</td><td>€625</td><td>2</td><td>2,602</td><td>356</td><td>122</td><td>58</td><td>59</td><td>37</td><td>5</td><td>34%</td><td>16%</td><td>48%</td></tr>
-      <tr><td>Kamianske</td><td>€152</td><td>2</td><td>2,168</td><td>170</td><td>25</td><td>12</td><td>12</td><td>8</td><td>4</td><td>15%</td><td>7%</td><td>48%</td></tr>
-      <tr><td>Vyshhorod</td><td>€26</td><td>1</td><td>645</td><td>57</td><td>13</td><td>2</td><td>4</td><td>4</td><td>3</td><td>23%</td><td>4%</td><td>15%</td></tr>
+      <tr><td>Київ</td><td>€38,180</td><td>18</td><td>262,567</td><td>13,628</td><td>5,507</td><td>3,009</td><td>2,993</td><td>1,833</td><td>182</td><td>40%</td><td>22%</td><td>55%</td></tr>
+      <tr><td>Дніпро</td><td>€18,017</td><td>17</td><td>88,157</td><td>6,597</td><td>2,922</td><td>1,682</td><td>1,674</td><td>1,008</td><td>106</td><td>44%</td><td>25%</td><td>58%</td></tr>
+      <tr><td>Кривий Ріг</td><td>€5,551</td><td>8</td><td>19,812</td><td>1,989</td><td>843</td><td>491</td><td>537</td><td>247</td><td>33</td><td>42%</td><td>25%</td><td>58%</td></tr>
+      <tr><td>Запоріжжя</td><td>€4,365</td><td>4</td><td>15,858</td><td>1,723</td><td>688</td><td>374</td><td>383</td><td>234</td><td>50</td><td>40%</td><td>22%</td><td>54%</td></tr>
+      <tr><td>Одеса</td><td>€2,321</td><td>5</td><td>13,726</td><td>1,249</td><td>434</td><td>219</td><td>210</td><td>138</td><td>17</td><td>35%</td><td>18%</td><td>50%</td></tr>
+      <tr><td>Ірпінь</td><td>€1,826</td><td>1</td><td>5,869</td><td>522</td><td>226</td><td>152</td><td>156</td><td>86</td><td>16</td><td>43%</td><td>29%</td><td>67%</td></tr>
+      <tr><td>Бровари</td><td>€1,550</td><td>1</td><td>5,590</td><td>529</td><td>235</td><td>132</td><td>140</td><td>74</td><td>18</td><td>44%</td><td>25%</td><td>56%</td></tr>
+      <tr><td>Павлоград</td><td>€625</td><td>2</td><td>2,602</td><td>356</td><td>122</td><td>58</td><td>59</td><td>37</td><td>5</td><td>34%</td><td>16%</td><td>48%</td></tr>
+      <tr><td>Камʼянське</td><td>€152</td><td>2</td><td>2,168</td><td>170</td><td>25</td><td>12</td><td>12</td><td>8</td><td>4</td><td>15%</td><td>7%</td><td>48%</td></tr>
+      <tr><td>Вишгород</td><td>€26</td><td>1</td><td>645</td><td>57</td><td>13</td><td>2</td><td>4</td><td>4</td><td>3</td><td>23%</td><td>4%</td><td>15%</td></tr>
       <tr class="total"><td>Разом</td><td>€72,612</td><td>59</td><td>416,994</td><td>26,820</td><td>11,015</td><td>6,131</td><td>6,168</td><td>3,669</td><td>434</td><td>41%</td><td>23%</td><td>56%</td></tr>
     </tbody>
   </table>
   </div>
-  <p class="footnote">* Compl. = колонка «Cart Abandonment Rate» зі звіту; фактично це Order Placed / Product Added (коефіцієнт завершення). Реальний abandonment = 100% − це значення.</p>
+  <p class="footnote">Залуч. — залученість меню (перегляд → кошик) · Конв. — конверсія (перегляд → замовлення) · Заверш. — завершення кошика (кошик → замовлення).</p>
 
-  <!-- CONCLUSIONS -->
-  <h2 id="conclusions">Ключові висновки</h2>
+  <!-- OPPORTUNITIES -->
+  <h2 id="opportunities">Що ми бачимо разом</h2>
   <div class="concl">
-    <div class="cbox info"><h3>Концентрація обороту</h3><p>Київ + Дніпро = 78% GMV і 59% активних мерчантів. Бізнес тримається на 2 містах; решта 8 — «довгий хвіст» з малими обсягами.</p></div>
-    <div class="cbox crit"><h3>Головна втрата — вершина воронки</h3><p>Лише 6,4% показів доходять до перегляду меню (417K → 26,8K). Найбільша точка просідання — варто дивитись на релевантність видачі та позиціонування мерчантів.</p></div>
-    <div class="cbox ok"><h3>Низ воронки здоровий</h3><p>Після перегляду меню конверсія добра: 41% додають товар, 23% оформлюють замовлення. Order Placed (6,1K) ≈ Delivered (6,2K) — мало відмов.</p></div>
-    <div class="cbox warn"><h3>Притік нових користувачів слабкий</h3><p>Лише 434 активації на рівні міста проти 3,669 на рівні бренду. Зростання — за рахунок наявної бази. Малі міста (Вишгород, Камʼянське) майже не конвертують.</p></div>
+    <div class="cbox acc"><h3>Сильні флагмани</h3><p>Київ і Дніпро впевнено лідирують — разом 78% обороту та більшість активних закладів. Це надійна опора партнерства, на яку можна спиратися при масштабуванні.</p></div>
+    <div class="cbox info"><h3>Потенціал на старті шляху клієнта</h3><p>Видимість дуже висока (417 тис. показів). Підвищення частки переходів із показів у перегляд меню — через банери, промо-позиції та якісні фото/описи — це найбільший спільний резерв зростання.</p></div>
+    <div class="cbox ok"><h3>Здорова конверсія</h3><p>Після перегляду меню результати сильні: 41% додають товар, 23% оформлюють замовлення, а скасувань майже немає. Це свідчить про привабливий асортимент і ціни.</p></div>
+    <div class="cbox acc"><h3>Зростання нової аудиторії</h3><p>Менші міста (Запоріжжя, Кривий Ріг, Одеса) і нові локації мають хороший потенціал. Спільні кампанії із залучення нових клієнтів допоможуть розкрити ці ринки.</p></div>
   </div>
 
-  <p class="note">Звіт згенеровано з вивантаження <b>curated_delivery / fact_provider</b> (2026-06-19). Усі визначення метрик звірено з Bolt Food Metrics Glossary (Databricks/Looker). Похідні коефіцієнти перераховано та перевірено на рівні міст і тоталу.</p>
+  <p class="note">Дані: внутрішня аналітика Bolt Food, травень 2026. Будемо раді обговорити деталі та спланувати наступні кроки спільно з вашою командою.</p>
 
 </div>
 </div>
 
 <script>
-const palette = {accent:'#34b27a', info:'#2563eb', ok:'#15a34a', warn:'#ea580c', crit:'#dc2626', muted:'#5d6b85', line:'#dfe5ee'};
+const palette = {accent:'#34b27a', info:'#2563eb', ok:'#15a34a', muted:'#5d6b85'};
 Chart.defaults.font.family = "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif";
 Chart.defaults.color = palette.muted;
 
 new Chart(document.getElementById('funnelChart'), {
   type:'bar',
   data:{ labels:['Перегляд меню','Додано в кошик','Замовлення оформлено','Доставлено'],
-    datasets:[{ label:'Сесії, #', data:[26820,11015,6131,6168], backgroundColor:palette.info, borderRadius:5, maxBarThickness:54 }] },
+    datasets:[{ label:'Сесії', data:[26820,11015,6131,6168], backgroundColor:palette.info, borderRadius:5, maxBarThickness:54 }] },
   options:{ indexAxis:'y', plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>c.parsed.x.toLocaleString('en-US')+' сесій'}}},
     scales:{ x:{ title:{display:true,text:'Кількість сесій'}, ticks:{callback:v=>v.toLocaleString('en-US')} } } }
 });
 
-const cities=['Kyiv','Dnipro','Kryvyi Rih','Zaporizhia','Odesa','Irpin','Brovary','Pavlohrad','Kamianske','Vyshhorod'];
+const cities=['Київ','Дніпро','Кривий Ріг','Запоріжжя','Одеса','Ірпінь','Бровари','Павлоград','Камʼянське','Вишгород'];
 new Chart(document.getElementById('gmvChart'), {
   type:'bar',
-  data:{ labels:cities, datasets:[{ label:'GMV, €', data:[38180,18017,5551,4365,2321,1826,1550,625,152,26], backgroundColor:palette.accent, borderRadius:4, maxBarThickness:30 }] },
+  data:{ labels:cities, datasets:[{ label:'Оборот, €', data:[38180,18017,5551,4365,2321,1826,1550,625,152,26], backgroundColor:palette.accent, borderRadius:4, maxBarThickness:30 }] },
   options:{ indexAxis:'y', plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>'€'+c.parsed.x.toLocaleString('en-US')}}},
-    scales:{ x:{ title:{display:true,text:'GMV до знижок, €'}, ticks:{callback:v=>'€'+v.toLocaleString('en-US')} } } }
+    scales:{ x:{ title:{display:true,text:'Оборот (GMV) до знижок, €'}, ticks:{callback:v=>'€'+v.toLocaleString('en-US')} } } }
 });
 
 new Chart(document.getElementById('convChart'), {
   type:'bar',
   data:{ labels:cities, datasets:[
-    { label:'Menu Engagement Rate', data:[40,44,42,40,35,43,44,34,15,23], backgroundColor:palette.info, borderRadius:4 },
-    { label:'Conversion Rate', data:[22,25,25,22,18,29,25,16,7,4], backgroundColor:palette.ok, borderRadius:4 } ] },
+    { label:'Залученість меню', data:[40,44,42,40,35,43,44,34,15,23], backgroundColor:palette.info, borderRadius:4 },
+    { label:'Конверсія', data:[22,25,25,22,18,29,25,16,7,4], backgroundColor:palette.ok, borderRadius:4 } ] },
   options:{ plugins:{legend:{position:'top'}, tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+'%'}}},
     scales:{ y:{ title:{display:true,text:'%'}, ticks:{callback:v=>v+'%'} } } }
 });
