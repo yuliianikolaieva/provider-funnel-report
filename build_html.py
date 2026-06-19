@@ -200,8 +200,10 @@ function renderMonth(key, ym){
   }
   html+='<h2>Шлях клієнта</h2><div class="chartbox"><canvas id="fn-'+key+'" height="110"></canvas><p class="chartcap">Від перегляду меню до доставленого замовлення, '+DATA.mname[ym]+' 2026.</p></div>';
   html+=consBlock(t,cons);
-  if(d.c&&d.c.length) html+=tableBlock('Деталізація за містами', d.c.slice(), false);
-  if(d.s&&d.s.length) html+=tableBlock('Деталізація за закладами', d.s.slice(), true);
+  var cAct=(d.c||[]).filter(function(x){return x.gmv>0||x.delivered>0;});
+  var sAct=(d.s||[]).filter(function(x){return x.gmv>0||x.delivered>0;});
+  if(cAct.length) html+=tableBlock('Деталізація за містами', cAct.slice(), false);
+  if(sAct.length) html+=tableBlock('Деталізація за закладами', sAct.slice(), true);
   return html;
 }
 function initMonthCharts(key, ym){
